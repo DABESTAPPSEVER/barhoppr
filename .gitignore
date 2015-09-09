@@ -1,0 +1,5 @@
+_IGNORE/*
+*.csv
+*.txt
+*.xls
+*.xlsx
