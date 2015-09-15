@@ -1,4 +1,5 @@
-var map;
+var map, service;
+var markers = [];
 
 function initialize(){
 	var lat = 5;
@@ -27,18 +28,9 @@ function initialize(){
 
 				// Using GPlaces API with GMaps API
 				// More info: https://developers.google.com/maps/documentation/javascript/places
-				var request = {
-					location: new google.maps.LatLng(lat,lng),
-					radius: '5000',
-					types: [
-						'bar',
-						'night_club'
-					]
-				};
-				console.log(request);
-
 				service = new google.maps.places.PlacesService(map);
-				service.nearbySearch(request,callback);
+				map.addListener('idle',performSearch);
+				// console.log('search performed');
 			},
 			function(){
 				handleLocationError(true,map.getCenter());
@@ -49,29 +41,63 @@ function initialize(){
 	}
 }
 
+function performSearch(){
+	var request = {
+		// bounds: map.getBounds(),
+		location: map.getCenter(),
+		radius: 1000,
+		types: [
+			'bar',
+			'night_club'
+		]
+	};
+	// console.log(map);
+	deleteMarkers()
+	service.radarSearch(request,callback);
+}
+
 function callback(results,status){
 	if(status == google.maps.places.PlacesServiceStatus.OK){
 		for(var i=0; i<results.length; i++){
 			var place = results[i];
-			console.log(place);
-			createMarker(place);
+			// console.log(place);
+			addMarker(place);
 		}
 	}
 }
 
-function createMarker(place){
+function addMarker(place){
 	var placeLoc = place.geometry.location;
 	var marker = new google.maps.Marker({
 		map: map,
 		position: place.geometry.location
-	})
+	});
+
+	google.maps.event.addListener(marker,'click',function(){
+		service.getDetails(place, function(result,status){
+			if(status!==google.maps.places.PlacesServiceStatus.OK){
+				console.error(status);
+				return;
+			}
+			// console.log(result);
+		});
+	});
+
+	markers.push(marker);
+}
+
+function deleteMarkers(){
+	for(var i=0; i<markers.length; i++){
+		markers[i].setMap(null);
+	}
+	markers = [];
 }
 
 function handleLocationError(browserHasGeolocation, pos){
 	if(browserHasGeolocation===true){
-		console.log(pos,"geolocation service failed");
+		// console.log(pos,"geolocation service failed");
 	} else {
-		console.log(pos,"browser don't support geoloco");
+		// console.log(pos,"browser don't support geoloco");
 	}
 }
 
