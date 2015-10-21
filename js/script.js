@@ -79,9 +79,9 @@ function addMarker(place){
 				console.error(status);
 				return;
 			}
-			placeLat = result['geometry']['location']['H'];
-			placeLng = result['geometry']['location']['L'];
-			// console.log(placeLat,placeLng);
+			placeLat = result.geometry.location.lat();
+			placeLng = result.geometry.location.lng();
+			console.log(result,placeLat,placeLng);
 			// ADD CALLS TO BACKEND HERE
 		});
 	});

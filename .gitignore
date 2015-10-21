@@ -3,3 +3,4 @@ _IGNORE/*
 *.txt
 *.xls
 *.xlsx
+*.sql
