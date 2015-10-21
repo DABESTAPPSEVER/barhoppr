@@ -79,10 +79,16 @@ function addMarker(place){
 				console.error(status);
 				return;
 			}
-			placeLat = result.geometry.location.lat();
-			placeLng = result.geometry.location.lng();
-			console.log(result,placeLat,placeLng);
-			// ADD CALLS TO BACKEND HERE
+
+			var lat = result.geometry.location.lat();
+			var lng = result.geometry.location.lng();
+			var obj = {
+				lat: lat,
+				lng: lng
+			};
+			$.get('/bar?lat='+lat+'&lng='+lng,function(data){
+				console.log(data);
+			})
 		});
 	});
 
@@ -98,9 +104,9 @@ function deleteMarkers(){
 
 function handleLocationError(browserHasGeolocation, pos){
 	if(browserHasGeolocation===true){
-		// console.log(pos,"geolocation service failed");
+		console.log(pos,"geolocation service failed");
 	} else {
-		// console.log(pos,"browser don't support geoloco");
+		console.log(pos,"browser don't support geoloco");
 	}
 }
 
