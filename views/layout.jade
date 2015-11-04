@@ -1,0 +1,13 @@
+doctype html
+html
+	head
+		title= title
+		
+		link(rel='stylesheet', href='/stylesheets/style.css')
+
+		script(src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js')
+		script(src='/javascripts/global.js')
+		script(src='/javascripts/functions.js')
+		script(async defer src='https://maps.googleapis.com/maps/api/js?key=AIzaSyCZCQvR55SUxfLvwe-pjr42swrKrH7SuxM&callback=initMap&libraries=places')
+	body
+	block content
